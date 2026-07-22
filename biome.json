@@ -1,0 +1,65 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
+  "files": {
+    "includes": [
+      "apps/studio/src/**",
+      "apps/*/src/**",
+      "apps/*/app/**",
+      "apps/*/lib/**",
+      "packages/**",
+      "!**/dist/**",
+      "*.json",
+      "*.md"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "none",
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["apps/*/app/**", "apps/*/lib/**"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noReactNativeLiteralColors": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/*/lib/theme.ts"],
+      "linter": {
+        "rules": {
+          "nursery": {
+            "noReactNativeLiteralColors": "off"
+          }
+        }
+      }
+    }
+  ],
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  }
+}

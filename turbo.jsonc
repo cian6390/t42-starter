@@ -1,0 +1,29 @@
+{
+  "$schema": "https://v2-10-4.turborepo.dev/schema.json",
+  "ui": "stream", // 沒有使用 "tui" 模式是因為 stream 模式比較方便把 terminal 訊息複製給 AI 分析
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
+      "cache": false
+    }
+  }
+}

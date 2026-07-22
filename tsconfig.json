@@ -1,0 +1,7 @@
+{
+  "extends": "@t42/tsconfig/base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,47 @@
+# dependencies
+node_modules
+.pnpm-store
+
+# build
+dist
+.next
+.turbo
+.expo
+*.tsbuildinfo
+
+# env
+.env
+.env.local
+.env.*.local
+
+# secrets vault (see .secrets.example/)
+.secrets/
+
+# vercel build output (per-app link files under apps/*/.vercel/ are committed)
+.vercel/output
+
+# logs
+*.log
+npm-debug.log*
+*.log.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea
+.vscode/*
+!.vscode/extensions.json
+
+# trigger.dev
+.trigger
+
+# testing
+coverage
+test-results
+playwright-report
+playwright/.cache
+
+# local scratch (one-off dumps, OCR samples — not committed)
+.scratch/
