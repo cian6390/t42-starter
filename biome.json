@@ -2,7 +2,6 @@
   "$schema": "https://biomejs.dev/schemas/2.5.2/schema.json",
   "files": {
     "includes": [
-      "apps/studio/src/**",
       "apps/*/src/**",
       "apps/*/app/**",
       "apps/*/lib/**",

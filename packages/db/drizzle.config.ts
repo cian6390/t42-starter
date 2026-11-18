@@ -4,7 +4,7 @@ const databaseUrl = process.env.DATABASE_URL
 
 if (!databaseUrl) {
   throw new Error(
-    'DATABASE_URL is not set. Run `pnpm db:migrate` (platform) from the repo root — it loads apps/<owner>/.env — or export DATABASE_URL first.'
+    'DATABASE_URL is not set. Run `pnpm db:migrate` from the repo root — it loads .env, or apps/<app>/.env when T42_ENV_APP is set — or export DATABASE_URL first.'
   )
 }
 

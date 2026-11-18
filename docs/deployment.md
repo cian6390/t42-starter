@@ -1,60 +1,39 @@
 # Deployment
 
-Studio deploys to **Vercel** with a **Neon** Postgres database.
+Each app under `apps/` deploys on its own. Platform migrations live in `packages/db` and run against that environment's `DATABASE_URL`.
 
 ## Prerequisites
 
-- Vercel project linked to `apps/studio`
-- Neon project with a connection string
-- Environment variables configured in Vercel
+- A host for the app
+- Postgres with a connection string
+- Environment variables configured for that environment
 
 ## Required environment variables
 
-Set these in the Vercel project (or via `apps/studio/.env` for local production builds):
+Platform packages expect:
 
 | Variable | Description |
 |----------|-------------|
-| `DATABASE_URL` | Neon Postgres connection string |
+| `DATABASE_URL` | Postgres connection string |
 | `BETTER_AUTH_SECRET` | Auth secret (`openssl rand -base64 32`) |
-| `BETTER_AUTH_URL` | Production URL (e.g. `https://your-app.vercel.app`) |
-| `NEXT_PUBLIC_APP_URL` | Same as `BETTER_AUTH_URL` for client-side links |
+| `BETTER_AUTH_URL` | Public URL of the app |
 
-Optional: OAuth provider keys, Resend email keys, observability settings (see `apps/studio/.env.example`).
+See `.env.example` for the local platform set. App-specific variables belong in that app's environment.
 
-## First deploy
+## Migrations
 
-1. Create a Neon database and copy `DATABASE_URL`.
-2. Configure environment variables in Vercel.
-3. Run migrations against the production database:
+Run platform migrations against the target database before the app serves traffic:
 
 ```bash
-# Point DATABASE_URL to Neon, then from repo root:
+# Point DATABASE_URL at the target database, then from the repo root:
 pnpm db:migrate
-pnpm studio:db:migrate
 ```
 
-4. Deploy Studio:
-
-```bash
-pnpm --filter @t42/studio build
-```
-
-Or push to the branch connected to Vercel for automatic deploys.
-
-## Migration strategy
+Set `T42_ENV_APP` when the connection string lives in `apps/<app>/.env` instead of the root `.env`.
 
 - **Platform migrations** (`packages/db`) — auth and shared tables. Run on every new environment.
-- **Studio migrations** (`apps/studio`) — app-specific tables. Run when Studio schema changes.
+- **App migrations** — live with the app that owns them. Run when that app's schema changes.
 
 Keep migration journals in version control. Do not edit applied migration files.
 
-## Local production build
-
-```bash
-cp apps/studio/.env.example apps/studio/.env
-# fill in values
-pnpm --filter @t42/studio build
-pnpm --filter @t42/studio start
-```
-
-Database connections are initialized lazily at runtime, so builds do not require a live database.
+Database connections in `@t42/db` are initialized lazily at runtime, so package builds do not require a live database.

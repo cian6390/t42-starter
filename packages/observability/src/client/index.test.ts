@@ -12,8 +12,8 @@ describe('initClientReporting', () => {
   })
 
   it('sets service name', () => {
-    initClientReporting({ service: 'studio' })
-    expect(getClientServiceName()).toBe('studio')
+    initClientReporting({ service: 'app' })
+    expect(getClientServiceName()).toBe('app')
   })
 
   it('is idempotent', () => {
@@ -40,7 +40,7 @@ describe('reportClientError', () => {
       context?: Record<string, unknown>
     }> = []
     initClientReporting({
-      service: 'studio',
+      service: 'app',
       reporter: (error, context) => {
         reported.push({ error, context })
       }

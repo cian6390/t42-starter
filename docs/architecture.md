@@ -11,9 +11,7 @@ scripts/       Repo-level automation
 
 ### Apps
 
-| App | Package | Description |
-|-----|---------|-------------|
-| Studio | `@t42/studio` | Next.js reference app (auth, task board, developer guide) |
+Deployable applications live in `apps/`. This repo has no apps yet. Add one under `apps/<name>`, give it its own `.env`, and set `T42_ENV_APP=<name>` when `pnpm db:*` should load that file.
 
 ### Packages
 
@@ -30,32 +28,25 @@ scripts/       Repo-level automation
 
 ## Platform boundary
 
-Each fork of this starter gets a **platform layer** and optional **app-specific** code.
-
-**Platform** (keep when adding new apps):
+Shared platform code lives in packages and is reused by every app:
 
 - `@t42/auth`, `@t42/db`, `@t42/validators`
 - Migrations in `packages/db/drizzle/`
 
-**Studio-specific** (safe to remove with the Studio app):
-
-- `studio` database schema
-- `apps/studio/src/schemas/task.ts`
-- `apps/studio/drizzle/`
-
-Studio reuses platform auth tables and adds its own `studio.task` table.
+App-specific schemas, migrations, and route handlers belong in that app.
 
 ## Environment variables
 
-Variables are scoped per deployable app:
+`pnpm db:*` loads the repo-root `.env` by default:
 
 ```
-apps/studio/.env     # Studio (default for db:* scripts)
+.env                 # default for db:* scripts
+apps/<app>/.env      # when T42_ENV_APP=<app>
 ```
 
-The root `.env.example` only points to the per-app examples. Do not commit `.env` files.
+Do not commit `.env` files. See `.env.example` for the platform variables.
 
-Scripts like `pnpm db:migrate` load `apps/studio/.env` by default via `scripts/run-with-app-env.mjs`. Override the target app with `T42_ENV_APP`.
+Scripts like `pnpm db:migrate` load that file via `scripts/run-with-app-env.mjs`.
 
 ## Database schemas
 
@@ -63,16 +54,13 @@ Scripts like `pnpm db:migrate` load `apps/studio/.env` by default via `scripts/r
 |--------|-------|--------|
 | `auth` | Platform | user, session, account, verification |
 | `public` | Platform | user_profile |
-| `studio` | Studio app | task |
 
 Local Postgres runs via Docker Compose (`pnpm db:up`). Default database name: `t42`.
 
-## Request flow (Studio)
+## Request flow
 
 ```
-Browser → proxy.ts → Route Handler / Page
-                  → @t42/auth (session)
-                  → @t42/db or apps/studio db client
+App route / handler
+  → @t42/auth (session)
+  → @t42/db
 ```
-
-`proxy.ts` is the Next.js 16 replacement for `middleware.ts`. It handles auth redirects and request logging.

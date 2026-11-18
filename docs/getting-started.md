@@ -12,28 +12,29 @@ From the repository root:
 
 ```bash
 pnpm install
-cp apps/studio/.env.example apps/studio/.env
+cp .env.example .env
 pnpm db:up
 pnpm db:migrate
-pnpm studio:db:migrate
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+`pnpm dev` starts packages and apps that define a `dev` script.
 
 ## Environment variables
 
-Environment variables live per app, not at the repo root. For local development, copy:
+Copy the platform example to the repo root:
 
 ```bash
-cp apps/studio/.env.example apps/studio/.env
+cp .env.example .env
 ```
 
 At minimum, set:
 
 - `DATABASE_URL` — local Postgres connection string
 - `BETTER_AUTH_SECRET` — random secret (`openssl rand -base64 32`)
-- `BETTER_AUTH_URL` — `http://localhost:3000` for local dev
+- `BETTER_AUTH_URL` — public URL of the app that uses `@t42/auth`
+
+When an app keeps its own env file, set `T42_ENV_APP` to that app's directory name so `pnpm db:*` loads `apps/<app>/.env` instead of the root `.env`.
 
 See [architecture.md#environment-variables](architecture.md#environment-variables) for details.
 
@@ -53,20 +54,18 @@ pnpm verify       # lint + typecheck + build + test
 | `pnpm db:up` | Start Postgres via Docker Compose |
 | `pnpm db:down` | Stop Postgres |
 | `pnpm db:migrate` | Platform migrations (`packages/db`) |
-| `pnpm studio:db:migrate` | Studio migrations (`apps/studio`) |
 | `pnpm db:studio` | Open Drizzle Studio |
 | `pnpm db:reset` | Drop volume, recreate DB, re-run migrations |
 
-After schema changes:
+After platform schema changes:
 
 ```bash
-pnpm db:generate          # platform
-pnpm studio:db:generate   # studio
+pnpm db:generate
 ```
 
 ## Troubleshooting
 
-**`DATABASE_URL is not set`** — copy and fill in `apps/studio/.env`.
+**`DATABASE_URL is not set`** — copy and fill in `.env`.
 
 **Port 5432 in use** — stop other Postgres instances or change the Docker port mapping.
 
