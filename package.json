@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "@t42/tsconfig": "workspace:*",
     "husky": "catalog:",
     "lint-staged": "catalog:",
     "turbo": "catalog:",
